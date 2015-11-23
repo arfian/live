@@ -569,7 +569,7 @@ func (this *HomeController) StopServer() {
 func (this *HomeController) GetLogService() {
 	r := this.Ctx.Request
 	var valLog string
-	b, err := ioutil.ReadFile(servicedbpath + "/LogService" + r.FormValue("ID") + "%!(EXTRA string=" + r.FormValue("DateFilter") + ")")
+	b, err := ioutil.ReadFile(logservicepath + "/LogService" + r.FormValue("ID") + "%!(EXTRA string=" + r.FormValue("DateFilter") + ")")
 	if err != nil {
 		valLog = ""
 		fmt.Println(err)
