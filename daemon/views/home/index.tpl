@@ -767,6 +767,11 @@
         Home.RecordServiceNew.Ping.Host('localhost');
         Home.RecordServiceNew.Ping.Port('-');
       }
+      Home.RecordServiceNew.Ping.CommandParm([]);
+      Home.RecordServiceNew.ExedCommandStart.CommandParm([]);
+      Home.RecordServiceNew.ExedCommandStop.CommandParm([]);
+      Home.RecordServiceNew.Service.EmailWarning([]);
+      Home.RecordServiceNew.Service.EmailError([]);
       for(var key in $("#txtcommandparmping").tokenInput('get')){
         Home.RecordServiceNew.Ping.CommandParm.push($("#txtcommandparmping").tokenInput('get')[key].name);
       }
@@ -782,6 +787,8 @@
       for(var key in $("#txtemailerror").tokenInput('get')){
         Home.RecordServiceNew.Service.EmailError.push($("#txtemailerror").tokenInput('get')[key].name);
       }
+      Home.RecordServiceNew.Service.Interval(parseInt(Home.RecordServiceNew.Service.Interval()));
+      Home.RecordServiceNew.Service.RestartAfterNCritical(parseInt(Home.RecordServiceNew.Service.RestartAfterNCritical()));
       $.ajax({
         url: url,
         type: 'post',
@@ -817,14 +824,12 @@
         if(res.success){
           Home.Processing(false);
           Home.RecordServices(_.map(res.data, function (r) { return ko.mapping.fromJS(r); }));
-          // for (var key in res.data){
-          //   if (res.data[key].Service.StatusService === 'Start'){
-          //     if (res.data[key].Service.LogStatus !== 'Success' || res.data[key].Service.LogStatus !== 'OK' || res.data[key].Service.LogStatus() !== 'Fail' || res.data[key].Service.LogStatus !== 'Error'){  
-          //       // console.log(Home.RecordServices()[key].Service.LogStatus());
-          //       setTimeout(function() { Home.ServiceStart(res.data[key].Service.ID,'Live', key, 'Grid'); }, 1000);
-          //     }
-          //   }
-          // }
+          console.log(Home.ArrService());
+          for (var key in Home.ArrService()){
+            if (Home.ArrService()[key].Service.StatusService() === 'Start' && Home.ArrService()[key].Service.LogStatus() === 'Success'){
+              setTimeout(function() { Home.ServiceStart(Home.ArrService()[key].Service.ID(),'Live', key, 'Grid'); }, Home.ArrService()[key].Service.Interval() * 1000);
+            }
+          }
         }else{
           alert(res.message);
           Home.Processing(false);
@@ -917,15 +922,17 @@
         dataType: 'json',
         data : {Status: 'Start', ID: idService, Statuslive : statusLive},
         success : function(res) {
-            Home.ArrService()[indexSer].Service.LogStatus(res.data);
-            if (res.data === 'OK' || res.data === 'Fail' || res.data === 'Error'){
-              $('#modalDetailService').modal('hide');
-              if (statusCheck != 'Grid')
-                Home.GetService();
+            if (res.data.Service.LogStatus === 'Fail' || res.data.Service.LogStatus === 'Error'){
+              if (Home.ArrService()[indexSer].LogStatus() !== 'Success'){
+                $('#modalDetailService').modal('hide');
+                ko.mapping.fromJS(res.data, Home.ArrService()[indexSer]);
+              }
             } else {
+              ko.mapping.fromJS(res.data, Home.ArrService()[indexSer]);
               var StatusService = statusCheck;
-              setTimeout(function() { Home.ServiceStart(idService,'Live', indexSer, StatusService); }, 1000);
+              setTimeout(function() { Home.ServiceStart(idService,'Live', indexSer, StatusService); }, res.data.Service.Interval * 1000);
             }
+            console.log(Home.ArrService()[indexSer].Service.StatusService());
         },
       });
     } else {
@@ -1003,7 +1010,7 @@
       },
     });
   }
-  Home.StopServer = function(){
+  Home.StopServer = function(idService){
     var url = "/home/stopserver";
     $.ajax({
       url: url,

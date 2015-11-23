@@ -127,7 +127,7 @@ func (this *HomeController) AddService() {
 func (this *HomeController) UpdateService() {
 	dataservice := m.ServiceNew{}
 	this.GetPayload(&dataservice)
-	fmt.Println(dataservice.Ping.CommandParm)
+	// fmt.Println(dataservice.Ping.CommandParm)
 	dataservice.Service.LastUpdate = time.Now()
 	dataservice.Service.StatusService = "Stop"
 
@@ -226,12 +226,28 @@ func (this *HomeController) StartService() {
 			fmt.Println(n, err)
 		}
 		defer f.Close()
-	} else if LogStatus == "Fail" {
+	} else if LogStatus == "Preparing" {
+		f, err := os.Create(servicedbpath + "/service" + strconv.Itoa(data.Service.ID) + ".json")
+		if err != nil {
+			fmt.Println(err)
+		}
+		data.Service.LogStatus = "Preparing"
+		data.Service.StatusService = "Stop"
+		b, err := json.Marshal(data)
+		n, err := io.WriteString(f, string(b))
+		if err != nil {
+			fmt.Println(n, err)
+		}
+		defer f.Close()
+	} else if LogStatus == "Error" || LogStatus == "Fail" {
 		f, err := os.Create(servicedbpath + "/service" + strconv.Itoa(data.Service.ID) + ".json")
 		if err != nil {
 			fmt.Println(err)
 		}
 		data.Service.LogStatus = "Fail"
+		if data.Service.LogStatus == "Stop" && data.Service.StatusService != "Success" {
+			data.Service.LogStatus = "Success"
+		}
 		data.Service.StatusService = "Stop"
 		b, err := json.Marshal(data)
 		n, err := io.WriteString(f, string(b))
@@ -241,7 +257,7 @@ func (this *HomeController) StartService() {
 		defer f.Close()
 	}
 
-	this.Json(helper.BuildResponse(true, LogStatus, ""))
+	this.Json(helper.BuildResponse(true, data, ""))
 }
 
 func ConfigService(data m.ServiceNew, statuslive string) string {
@@ -494,7 +510,7 @@ func ConfigService(data m.ServiceNew, statuslive string) string {
 			}
 		}
 	}
-	return "Fail"
+	return "Error"
 }
 
 func (this *HomeController) StopService() {
