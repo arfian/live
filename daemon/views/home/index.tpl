@@ -824,7 +824,7 @@
         if(res.success){
           Home.Processing(false);
           Home.RecordServices(_.map(res.data, function (r) { return ko.mapping.fromJS(r); }));
-          console.log(Home.ArrService());
+          // console.log(Home.ArrService());
           for (var key in Home.ArrService()){
             if (Home.ArrService()[key].Service.StatusService() === 'Start' && Home.ArrService()[key].Service.LogStatus() === 'Success'){
               setTimeout(function() { Home.ServiceStart(Home.ArrService()[key].Service.ID(),'Live', key, 'Grid'); }, Home.ArrService()[key].Service.Interval() * 1000);
@@ -932,7 +932,6 @@
               var StatusService = statusCheck;
               setTimeout(function() { Home.ServiceStart(idService,'Live', indexSer, StatusService); }, res.data.Service.Interval * 1000);
             }
-            console.log(Home.ArrService()[indexSer].Service.StatusService());
         },
       });
     } else {
