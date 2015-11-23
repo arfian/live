@@ -587,7 +587,7 @@
           <div class="col-md-12">
             <button class="btn btn-sm btn-success space-right" data-bind="click:function(){Home.DetailService(Service.ID(),'Start', Home.IndexService())}"><span class="glyphicon glyphicon-play"></span> Start</button>
             <button class="btn btn-sm btn-danger space-right" data-bind="click:function(){Home.ServiceStop(Service.ID())}"><span class="glyphicon glyphicon-stop"></span> Stop</button>
-            <button class="btn btn-sm btn-danger space-right" data-bind="click:function(){Home.StopServer(Service.ID())}"><span class="glyphicon glyphicon-stop"></span> Stop Server</button>
+            <button class="btn btn-sm btn-danger space-right" data-bind="click:function(){Home.StopServer(Service.ID())}"><span class="glyphicon glyphicon-stop"></span> Stop Service</button>
             <button class="btn btn-sm btn-warning space-right" data-bind="click:Home.Log"><span class="glyphicon glyphicon-list-alt"></span> Log</button>
             <button class="btn btn-sm btn-info space-right" data-bind="click:function(){Home.EditService('Detail')}"><span class="glyphicon glyphicon-pencil"></span> Update</button>
             <button class="btn btn-sm btn-danger space-right" data-bind="click:function(){Home.RemoveService(Service.ID())}"><span class="glyphicon glyphicon-trash"></span> Remove</button>
