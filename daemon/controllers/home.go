@@ -441,12 +441,13 @@ func ConfigService(data m.ServiceNew, statuslive string) string {
 	svc.EmailError = data.Service.EmailWarning
 	svc.EmailWarning = data.Service.EmailError
 
+	portemail, _ := strconv.Atoi(beego.AppConfig.String("portemail"))
 	svc.Mail = &lv.EmailSetting{
-		SenderEmail:   "admin.support@eaciit.com",
-		HostEmail:     "smtp.office365.com",
-		PortEmail:     587,
-		UserEmail:     "admin.support@eaciit.com",
-		PasswordEmail: "B920Support",
+		SenderEmail:   beego.AppConfig.String("senderemail"),
+		HostEmail:     beego.AppConfig.String("hostemail"),
+		PortEmail:     portemail,
+		UserEmail:     beego.AppConfig.String("useremail"),
+		PasswordEmail: beego.AppConfig.String("passwordemail"),
 	}
 
 	svc.Log, err = toolkit.NewLog(false, true, logservicepath+"/", "LogService"+strconv.Itoa(data.Service.ID), "20060102")

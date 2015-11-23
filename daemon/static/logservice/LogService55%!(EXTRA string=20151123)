@@ -1,3 +1,6 @@
 WARNING 2015/11/23 10:17:18 [Service  check fails - 1. Error: Unable to access http://localhost:27017, Get http://localhost:27017: dial tcp 127.0.0.1:27017: connection refused]
 WARNING 2015/11/23 10:21:01 [Service  check fails - 1. Error: Unable to access http://localhost:27017, Get http://localhost:27017: dial tcp 127.0.0.1:27017: connection refused]
 WARNING 2015/11/23 10:21:09 [Service  check fails - 2. Error: Unable to access http://localhost:27017, Get http://localhost:27017: dial tcp 127.0.0.1:27017: connection refused]
+WARNING 2015/11/23 10:45:55 [Service  check fails - 1. Error: Unable to access http://localhost:27017, Get http://localhost:27017: dial tcp 127.0.0.1:27017: connection refused]
+WARNING 2015/11/23 10:46:00 [Service  check fails - 2. Error: Unable to access http://localhost:27017, Get http://localhost:27017: dial tcp 127.0.0.1:27017: connection refused]
+WARNING 2015/11/23 10:46:07 [Service  check fails - 3. Error: Unable to access http://localhost:27017, Get http://localhost:27017: dial tcp 127.0.0.1:27017: connection refused]
